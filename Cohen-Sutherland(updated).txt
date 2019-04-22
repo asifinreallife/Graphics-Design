@@ -1,0 +1,310 @@
+#include <iostream>
+#include <stdio.h>
+#include <GL/glut.h>
+using namespace std;
+
+
+int window_x1, window_y1,window_x2, window_y2;
+int x1,y1,x2,y2;
+
+bool abrl[4] = {0};
+void Linei();
+void Lined();
+void Linex();
+void Liney();
+
+void myinit() {
+    glClearColor(1.0, 1.0, 1.0, 0.0);
+    glColor3f(1.0f, 0.0f, 0.0f);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0,1024,0, 768);
+    //gluOrtho2D(window_x1,window_x2,window_y1, window_y2);
+}
+
+void window(){
+    glBegin(GL_LINE_LOOP);
+    glVertex2d(window_x1, window_y1);
+    glVertex2d(window_x2, window_y1);
+    glVertex2d(window_x2, window_y2);
+    glVertex2d(window_x1, window_y2);
+    glEnd();
+}
+
+
+void myDisplay(void){
+    glClear(GL_COLOR_BUFFER_BIT);
+    glColor3f(0.0, 0.0, 0.0);
+    window();
+
+    if(x1<=x2 && y1<=y2)
+        Linei();
+    else if (x1>x2&& y1>y2)
+        Lined();
+    else if (x1>=x2&& y1<y2)
+        Linex();
+    else if (x1<x2&& y1>y2)
+        Liney();
+    else
+        Linei();
+
+
+    glutSwapBuffers();
+}
+
+void calculate (int x ,int y)
+{
+    if (x<window_x1)
+        abrl[0]=1;
+    if (x>window_x2)
+        abrl[1]=1;
+    if (y<window_y1)
+        abrl[2]=1;
+    if (y>window_y2)
+        abrl[3]=1;
+}
+
+void Linex()
+{
+    float x, y,dx, dy, m;
+
+    x = x1;
+    y = y2;
+
+    m = (float)(y2 - y1)/(float) (x1 - x2);
+
+    if(m<1)
+    {
+        while (x>=x2)
+    {
+                y=y-m;
+                x--;
+        calculate(x,y);
+
+        if(abrl[0] || abrl[1] || abrl[2] || abrl[3]){
+	    glColor3f(0.0, 0.0, 0.0);
+            glBegin(GL_POINTS);
+            glVertex2f(x, y);
+            glEnd();
+        }else{
+	    glColor3f(1.0, 0.0, 0.0);
+            glBegin(GL_POINTS);
+            glVertex2f(x, y);
+            glEnd();
+        }
+
+        for (int j = 0; j < 4; j++) {
+            abrl[j] = 0;
+            }
+        }
+    }
+
+        else
+    {
+             while(y<=y2)
+        {
+            y++;
+            x=x+(1/m);
+
+            calculate(x,y);
+
+        if(abrl[0] || abrl[1] || abrl[2] || abrl[3]){
+	    glColor3f(0.0, 0.0, 0.0);
+            glBegin(GL_POINTS);
+            glVertex2f(x, y);
+            glEnd();
+        }
+        else
+        {
+            glColor3f(1.0, 0.0, 0.0);
+                glBegin(GL_POINTS);
+                glVertex2f(x, y);
+                glEnd();
+        }
+
+        for (int j = 0; j < 4; j++) {
+            abrl[j] = 0;
+            }
+        }
+    }
+}
+
+void Liney()
+{
+    float x, y,dx, dy, m;
+
+    x = x1;
+    y = y1;
+
+    m = (float)(y2 - y1)/(float) (x1 - x2);
+    if(m<1)    {
+        while(x<=x2)
+        {
+            y=y+m;
+            x++;
+            calculate(x,y);
+
+        if(abrl[0] || abrl[1] || abrl[2] || abrl[3]){
+	    glColor3f(0.0, 0.0, 0.0);
+            glBegin(GL_POINTS);
+            glVertex2f(x, y);
+            glEnd();
+        }else{
+	    glColor3f(1.0, 0.0, 0.0);
+            glBegin(GL_POINTS);
+            glVertex2f(x, y);
+            glEnd();
+        }
+
+        for (int j = 0; j < 4; j++) {
+            abrl[j] = 0;
+            }
+        }
+    }
+    else    {
+
+        while(y>=y2)
+        {
+            y--;
+            x=x-(1/m);
+            calculate(x,y);
+
+        if(abrl[0] || abrl[1] || abrl[2] || abrl[3]){
+	    glColor3f(0.0, 0.0, 0.0);
+            glBegin(GL_POINTS);
+            glVertex2f(x, y);
+            glEnd();
+        }else{
+	    glColor3f(1.0, 0.0, 0.0);
+            glBegin(GL_POINTS);
+            glVertex2f(x, y);
+            glEnd();
+        }
+
+        for (int j = 0; j < 4; j++) {
+            abrl[j] = 0;
+            }
+        }
+    }
+}
+
+void Lined()
+{
+    float x, y,dx, dy, m;
+
+    x = x1;
+    y = y1;
+
+    m = (float)(y1 - y2)/(float) (x1 - x2);
+
+    for (int i = x; x >=0 ; i--) {
+
+        if(m>1)
+        {
+            dx = 1;
+            dy = m*dx;
+        }
+
+        else
+        {
+            dy = 1;
+            dx = dy/m;
+        }
+
+        x = x-dx;
+        y = y-dy;
+
+        calculate(x,y);
+
+        if(abrl[0] || abrl[1] || abrl[2] || abrl[3]){
+	    glColor3f(0.0, 0.0, 0.0);
+            glBegin(GL_POINTS);
+            glVertex2f(x, y);
+            glEnd();
+        }else{
+	    glColor3f(1.0, 0.0, 0.0);
+            glBegin(GL_POINTS);
+            glVertex2f(x, y);
+            glEnd();
+        }
+
+        for (int j = 0; j < 4; j++) {
+            abrl[j] = 0;
+        }
+     }
+}
+
+void Linei()
+{
+    float x, y,dx, dy, m;
+
+    x = x1;
+    y = y1;
+
+    m = (float)(y2 - y1)/(float) (x2 - x1);
+
+    for (int i = 0; x <= x2 ; i++) {
+
+        if(m<=1)
+        {
+            dx = 1;
+            dy = m*dx;
+        }
+
+        else
+        {
+            dy = 1;
+            dx = dy/m;
+        }
+
+        x = x+dx;
+        y = y+dy;
+
+        calculate(x,y);
+
+        if(abrl[0] || abrl[1] || abrl[2] || abrl[3]){
+	    glColor3f(0.0, 0.0, 0.0);
+            glBegin(GL_POINTS);
+            glVertex2f(x, y);
+            glEnd();
+        }else{
+	    glColor3f(1.0, 0.0, 0.0);
+            glBegin(GL_POINTS);
+            glVertex2f(x, y);
+            glEnd();
+        }
+
+        for (int j = 0; j < 4; j++) {
+            abrl[j] = 0;
+        }
+     }
+}
+
+
+int main(int argc, char** argv){
+    cout<<"Enter the minimum x,y Coordinate of viewport: ";
+    cin>>window_x1;  cin>>window_y1;
+
+    cout<<"Enter the maximum x,y Coordinate viewport: ";
+    cin>>window_x2;  cin>>window_y2;
+
+    cout<<"Enter the x,y coordinate of the line begin: ";
+    cin>>x1;   cin>>y1;
+
+    cout<<"Enter the x,y coordinate of the line end: ";
+    cin>>x2;    cin>>y2;
+
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutInitWindowSize(1024, 768);
+    //glutInitWindowSize(window_x2,window_y2);
+    glutInitWindowPosition(100, 100);
+    glutCreateWindow("clipping");
+    myinit();
+    glutDisplayFunc(myDisplay);
+    glutMainLoop();
+        return 0;
+}
+
+
+
