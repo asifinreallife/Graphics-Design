@@ -1,0 +1,107 @@
+#include<stdio.h>
+#include <GL/glut.h>
+
+void myDisplay(void)
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+    glColor3f(0.0,0.0,0.0);
+    int i=0;
+    for (int y=24;y<700;y+=90)
+    {
+        for (int x=114;x<800;x+=90)
+        {
+        //i++;
+        if (y==24||y==204||y==384||y==564)
+        {
+            if (i%2==1)
+                {
+                    glColor3f(0.0,0.0,0.0);
+                    glBegin(GL_POLYGON);
+                    glVertex2i(x,y);
+                    glVertex2i(x,y+90);
+                    glVertex2i(x,y);
+                    glVertex2i(x+90,y);
+                    //glVertex2i(x+90,y);
+                    glVertex2i(x+90,y+90);
+                    glVertex2i(x,y+90);
+                    glVertex2i(x+90,y+90);
+                    glEnd();
+                    glFlush ();
+                }
+            else
+                {
+                    glColor3f(1.0,1.0,1.0);
+                    glBegin(GL_POLYGON);
+                    glVertex2i(x,y);
+                    glVertex2i(x,y+90);
+                    glVertex2i(x,y);
+                    glVertex2i(x+90,y);
+                    glVertex2i(x+90,y);
+                    glVertex2i(x+90,y+90);
+                    glVertex2i(x,y+90);
+                    glVertex2i(x+90,y+90);
+                    glEnd();
+                    glFlush ();
+                }
+            }
+            else
+            {
+                if (i%2==1)
+                {
+                    glColor3f(1.0,1.0,1.0);
+                    glBegin(GL_POLYGON);
+                    glVertex2i(x,y);
+                    glVertex2i(x,y+90);
+                    glVertex2i(x,y);
+                    glVertex2i(x+90,y);
+                    glVertex2i(x+90,y);
+                    glVertex2i(x+90,y+90);
+                    glVertex2i(x,y+90);
+                    glVertex2i(x+90,y+90);
+                    glEnd();
+                    glFlush ();
+                }
+            else
+                {
+                    glColor3f(0.0,0.0,0.0);
+                    glBegin(GL_POLYGON);
+                    glVertex2i(x,y);
+                    glVertex2i(x,y+90);
+                    glVertex2i(x,y);
+                    glVertex2i(x+90,y);
+                    glVertex2i(x+90,y);
+                    glVertex2i(x+90,y+90);
+                    glVertex2i(x,y+90);
+                    glVertex2i(x+90,y+90);
+                    glEnd();
+                    glFlush ();
+                }
+            }
+		i++;
+
+        }
+    }
+}
+
+void myInit()
+{
+    glClearColor(1.0,0.0,0.0,.0);
+    glColor3f(0.0f,0.0f,0.0f);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0.0,1024.0,0.0,768.0);
+}
+
+int main (int argc , char** argv)
+{
+    glutInit(&argc ,argv);
+    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+    glutInitWindowSize(1024, 768);
+    glutInitWindowPosition(0,0);
+    glutCreateWindow("Assignment");
+    glutDisplayFunc(myDisplay);
+    myInit();
+    glutMainLoop();
+    return 0;
+}
+
