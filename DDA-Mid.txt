@@ -1,0 +1,91 @@
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+
+#include <stdlib.h>
+#include<iostream>
+using namespace std;
+float x1,x2,y1,y2,flag;
+
+void dda (float x1,float y1,float x2, float y2)
+{
+    float length,xi,yi;int i;
+        length = abs(x2-x1);
+        if ( abs(y2-y1)>length )
+            length=abs(y2-y1);
+        xi=(x2-x1)/length; yi=(y2-y1)/length;
+        xi=xi+.5; yi=yi+.5;
+
+        for (i=1;i<length;i++)
+        {
+            glBegin(GL_POINTS);
+                glVertex2f(x1,y1);
+            glEnd();
+            x1 += xi;
+            y1 += yi;
+        }
+}
+
+void myDisplay()
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+    glColor3f(1.0,0.0,0.0);
+
+    glBegin(GL_LINES);
+
+    glVertex2f(100.0,100.0);
+    glVertex2f(200.0, 450.0);
+
+    glEnd();
+
+    if (flag==1)
+    {
+        dda(x1,y1,x2,y2);
+
+    }
+    glFlush();
+}
+
+void myInit()
+{
+    glClearColor(1.0,1.0,1.0,1.0);
+    glColor3f(0.0f,0.0f,0.0f);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0.0,1024.0,0.0,768.0);
+}
+
+int main (int argc , char** argv)
+{
+    glutInit(&argc ,argv);
+    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+    glutInitWindowSize(1024, 768);
+    glutInitWindowPosition(0,0);
+    glutCreateWindow("Algorithm:");
+    cout<< "Enter Your Choice :";
+    cout << "\n1.DDA \n2.Bresenham \n3.Exit\n";
+    cin >> flag;
+   if (flag == 1)
+   {
+        cout << "Enter initial point :";
+        cin >> x1; cin>>y1;
+        cout<< "Enter final point :";
+        cin >> x2; cin>>y2;
+    }
+    else if (flag == 2)
+    {
+        cout << "Enter initial point :";
+        cin >> x1; cin>>y1;
+        cout<< "Enter final point :";
+        cin >> x2; cin>>y2;
+    }
+
+    myInit();
+    glutDisplayFunc(myDisplay);
+    glutMainLoop();
+    return 0;
+}
+
+
