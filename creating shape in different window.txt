@@ -1,0 +1,78 @@
+#include <stdio.h>
+#include <GL/glut.h>
+
+void myDisplay1(void)
+{
+glClear (GL_COLOR_BUFFER_BIT);
+ glColor3f (0.6, 0.4, 0.1);
+glPointSize(4.0);
+
+glBegin(GL_TRIANGLES);
+glVertex2i(200, 10);
+glVertex2i(170, 60);
+glVertex2i(140, 10);
+
+glEnd();
+glFlush();
+
+glBegin(GL_LINE_LOOP);
+glVertex2i(380, 10);
+glVertex2i(380, 50);
+glVertex2i(300, 50);
+glVertex2i(300, 10);
+glEnd();
+glFlush();
+
+}
+
+void myDisplay2(void)
+{
+glClear (GL_COLOR_BUFFER_BIT);
+ glColor3f (0.0, 0.0, 0.0);
+glPointSize(4.0);
+
+glBegin(GL_LINE_LOOP);
+glVertex2i(200, 10);
+glVertex2i(170, 60);
+glVertex2i(140, 10);
+
+glEnd();
+glFlush();
+
+glBegin(GL_LINE_LOOP);
+glVertex2i(380, 10);
+glVertex2i(380, 50);
+glVertex2i(300, 50);
+glVertex2i(300, 10);
+glEnd();
+glFlush();
+
+}
+
+
+void myInit (void)
+{
+glClearColor(1.0, 1.0, 1.0, 0.0);
+glColor3f(0.0f, 0.0f, 0.0f);
+glPointSize(4.0);
+glMatrixMode(GL_PROJECTION);
+glLoadIdentity();
+gluOrtho2D(0.0, 640.0, 0.0, 480.0);
+}
+
+
+void main(int argc, char** argv)
+{
+glutInit(&argc, argv);
+glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB);
+glutInitWindowSize (640, 480);
+glutInitWindowPosition (100, 150);
+glutCreateWindow ("Triangle");
+myInit ();
+glutDisplayFunc(myDisplay1);
+glutCreateWindow ("Rectangle");
+glutDisplayFunc(myDisplay2);
+myInit ();
+
+glutMainLoop();
+}
