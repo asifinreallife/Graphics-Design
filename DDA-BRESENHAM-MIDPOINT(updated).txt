@@ -1,0 +1,185 @@
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+#include <math.h>
+#include <stdlib.h>
+#include<iostream>
+using namespace std;
+float x1,x2,y11,y2,r,flag;
+
+void dda (float x1,float y1,float x2, float y2)
+{
+    float x, y,dx, dy, m;
+
+    x = x1;
+    y = y1;
+
+    m = (y2 - y1)/ (x2 - x1);
+
+    for (int i = 0; x <= x2 ; i++) {
+
+        if(m<=1)
+        {
+            dx = 1;
+            dy = m*dx;
+        }
+
+        else
+        {
+            dy = 1;
+            dx = dy/m;
+        }
+
+        x = x+dx;
+        y = y+dy;
+
+        glBegin(GL_POINTS);
+            glVertex2f(x, y);
+        glEnd();
+    }
+}
+
+void Drawcircle(float x,float y)
+{
+glColor3f(1.0,0.0,0.0);
+ glBegin(GL_TRIANGLE_FAN);
+    glVertex2f(x1 + x,y11 - y);
+    glVertex2f(x1 + y,y11 - x);
+    glVertex2f(x1 + y,y11 + x);
+    glVertex2f(x1 + x,y11 + y);
+    glVertex2f(x1 - x,y11 + y);
+    glVertex2f(x1 - y,y11 + x);
+    glVertex2f(x1 - y,y11 - x);
+    glVertex2f(x1 - x,y11 - y);
+    glEnd();
+}
+
+void midpoint(float x1,float y1,float r)
+{
+    float x=0,y=r,p=1.25-r;
+    Drawcircle(x,y);
+    while(x<=y)
+    {
+        if (p<0)
+        {
+            x=x+1;
+            p=p+(2*x)+1;
+
+
+        }
+        else
+        {
+            x=x+1;
+            y=y-1;
+            p=p+(2*x)-(2*y)+1;
+        }
+        Drawcircle(x,y);
+    }
+}
+
+void bresenham(float x1,float y1,float x2, float y2)
+{
+    float x=x1,y=y1; float dx=x2-x1,dy=y2-y1;
+    float dt=2*(dy-dx),ds=2*dy;
+    float d=2*dy-dx;
+
+    glBegin(GL_LINES);
+
+    glVertex2f(450.0,450.0);
+    glVertex2f(200.0, 450.0);
+
+    glEnd();
+    while (x<x2)
+    {
+        x++;
+        if (d<0)
+            d=d+ds;
+        else
+        {
+            y++;
+            d=d+dt;
+        }
+
+        glBegin(GL_POINTS);
+                glVertex2f(x,y);
+            glEnd();
+    }
+}
+
+void myDisplay()
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+    glColor3f(1.0,0.0,0.0);
+    if (flag==1)
+    {
+        dda(x1,y11,x2,y2);
+
+    }
+    else if(flag==2)
+    {
+        bresenham(x1,y11,x2,y2);
+    }
+
+    else if(flag==3)
+    {
+        midpoint(x1,y11,r);
+    }
+    else
+        glClear(GL_COLOR_BUFFER_BIT);
+
+    glFlush();
+}
+
+void myInit()
+{
+    glClearColor(1.0,1.0,1.0,1.0);
+    glColor3f(1.0f,1.0f,1.0f);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0.0,1024.0,0.0,768.0);
+}
+
+int main (int argc , char** argv)
+{
+    glutInit(&argc ,argv);
+    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+    glutInitWindowSize(1024, 768);
+    glutInitWindowPosition(0,0);
+    glutCreateWindow("Algorithm:");
+    cout<< "Enter Your Choice :";
+    cout << "\n1.DDA \n2.Bresenham \n3.Midpoint Circle \n4.Exit\n";
+    cin >> flag;
+   if (flag == 1)
+   {
+        cout << "Enter initial point :";
+        cin >> x1; cin>>y11;
+        cout<< "Enter final point :";
+        cin >> x2; cin>>y2;
+    }
+    else if (flag == 2)
+    {
+        cout << "Enter initial point :";
+        cin >> x1; cin>>y11;
+        cout<< "Enter final point :";
+        cin >> x2; cin>>y2;
+    }
+
+    else if (flag == 3)
+    {
+        cout << "Enter Center point :";
+        cin >> x1; cin>>y11;
+        cout<< "Enter radius:";
+        cin >> r;
+    }
+
+    myInit();
+    glutDisplayFunc(myDisplay);
+    glutMainLoop();
+    return 0;
+}
+
+
+
+
